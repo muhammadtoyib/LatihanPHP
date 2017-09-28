@@ -24,10 +24,7 @@
 			<div class="form-group">
 				<select name="id" class="form-control">
 					<?php
-					while($row = mysqlifetch_assoc($result)){
-						$id = $row['id'];
-						echo "<option value='$id'>$id</option>";
-					}
+					showAllUserId();
 					?>
 				</select>
 			</div>
