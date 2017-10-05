@@ -3,7 +3,7 @@ if($_GET['action'] =="edit"){
 	echo "<h1>Edit Mahasiswa</h1>";
 	include("db.php");
 	$query = "SELECT * FROM mahasiwa
-			WHERE id = $_GET[id]";
+			WHERE id = $_GET[No]";
 	$hasil = mysqli_query($koneksi, $query);
 	$row = mysqli_fetch_assoc($hasil);
 }else{
@@ -24,6 +24,6 @@ if($_GET['action'] =="edit"){
 	Jurusan: 
 	<input type="text" name="jurusan" value="<?php echo $row['Jurusan']; ?>" />
 	<br />
-	<input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
+	<input type="hidden" name="id" value="<?php echo $row['No']; ?>" />
 	<input type="submit" name="submit" />
 </form>

@@ -12,10 +12,10 @@ if($_GET['action'] == "add"){
 				SET NIM = '$_POST[NIM]',
 					Nama = '$_POST[Nama]',
 					Jurusan = '$_POST[Jurusan]'
-				WHERE id = $_POST[id]";
+				WHERE id = $_POST[No]";
 }else if($_GET['action'] == "delete"){
 	$query = "DELETE FROM mahasiswa 
-				WHERE id=$_GET[id]";
+				WHERE id=$_GET[No]";
 }
 
 mysqli_query($koneksi, $query);

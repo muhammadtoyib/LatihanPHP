@@ -24,7 +24,7 @@ $hasil = mysqli_query($koneksi, $query);
 	while($row = mysqli_fetch_assoc($hasil)){
 		?>
 		<tr>
-			<td><?php echo $row['id']; ?></td>
+			<td><?php echo $row['No']; ?></td>
 			<td><?php echo $row['NIM']; ?></td>
 			<td><?php echo $row['Nama']; ?></td>
 			<td><?php echo $row['Jurusan']; ?></td>
