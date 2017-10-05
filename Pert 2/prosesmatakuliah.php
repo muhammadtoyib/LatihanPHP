@@ -12,6 +12,9 @@ if($_GET['action'] == "add"){
 				SET kode_dosen = '$_POST[kode_mtk]',
 					nama = '$_POST[nama_mtk]',
 				WHERE id = $_POST[id]";
+}else if($_GET['action'] == "delete"){
+	$query = "DELETE FROM matakuliah 
+				WHERE id=$_GET[id]";
 }
 
 mysqli_query($koneksi, $query);
