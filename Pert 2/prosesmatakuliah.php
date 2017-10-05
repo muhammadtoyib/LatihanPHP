@@ -1,4 +1,4 @@
-<? //filename: proses_mtk.php 
+<? //filename: prosesmatakuliah.php 
 
 include("db.php");
 
