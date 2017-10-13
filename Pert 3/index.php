@@ -1,19 +1,27 @@
 <?php // filename: index.php
-	//koneksi
-	include("koneksi.php");
-	
-	//query
-	$query = "SELECT * FROM kontak";
-	$hasil = mysqli_query($db, $query);
+include("koneksi.php");
+
+if(isset($_POST['filter'])){
+$query = "SELECT * FROM kontak
+			INNER JOIN kategori
+			ON kontak.kategori_id = kategori.id
+			WHERE kategori_id = $_POST[kategori]";
+}else{
+$query = "SELECT * FROM kontak
+			INNER JOIN kategori
+			ON kontak.kategori_id = kategori.id";
+}
+
+$query = "SELECT * FROM kontak
+			INNER JOIN kategori
+			ON kontak.kategori_id = kategori.id";
+$hasil = mysqli_query($db, $query);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Data Mahasiswa Kalbis</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" 
-	integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" 
-	crossorigin="anonymous">
+	<title>Phone Book</title>
 </head>
 <body>
 <h1>Phone Book</h1>
@@ -25,17 +33,23 @@
 </div>
 <div id="filter">
 	<b>Filter berdasarkan kategori: </b>
+	<?php
+	$q2 = "SELECT * FROM kategori";
+	$h2 = mysqli_query($db, $q2);
+	while($row = mysqli_fetch_assoc($h2)){
+	?>
 	<form action="" method="post">
-		<select name="">
-			<option value=""></option>
+		<select name="kategori">
+			<option value="<?php echo $row['id'] ?>"></option>
+			<?php } ?>
 		</select>
 		<input type="submit" name="filter" value="Filter" />
-		<input type="submit" name="Reset" value="Reset" />
 	</form>
 </div>
+
 <div id="search">
 	<b>Search: </b>
-	<form action="search.php" method="post">
+	<form action="" method="post">
 		<input type="text" name="search_text" />
 		<input type="submit" name="cari" value="Cari" />
 	</form>
@@ -55,24 +69,25 @@
 			</tr>
 		</thead>
 		<tbody>
-		<?php
-		while($row = mysqli_fetch_assoc($hasil)){
+			<?php
+			$i=0;
+			while($row = mysqli_fetch_assoc($hasil)){
+				$i++;
 			?>
 			<tr>
-				<td><?php echo $row['id']; ?></td>
+				<td><?php echo $i; ?></td>
 				<td><?php echo $row['nama']; ?></td>
 				<td><?php echo $row['phone']; ?></td>
 				<td><?php echo $row['email']; ?></td>
-				<td><?php echo $row['kategori_id']; ?></td>
-				<td>							
-					<a href="form_edit_kontak.php?id=<?php echo $row['id'];?>">Edit</a> | 
-					<a href="delete_kontak.php?id=<?php echo $row['id'];?>">Delete</a>
+				<td><?php echo $row['keterangan']; ?></td>
+				<td>
+					<a href="">Edit</a> | 
+					<a href="">Delete</a>
 				</td>
-			
 			</tr>
 			<?php
-			}
-			?>
+		}
+		?>
 		</tbody>
 	</table>
 </div>
