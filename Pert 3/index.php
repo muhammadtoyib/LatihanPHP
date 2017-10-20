@@ -1,21 +1,41 @@
-<?php // filename: index.php
-include("koneksi.php");
+<?php
+include("koneksi.php"); //database
 
+// 1.
 if(isset($_POST['filter'])){
-$query = "SELECT * FROM kontak
-			INNER JOIN kategori
-			ON kontak.kategori_id = kategori.id
-			WHERE kategori_id = $_POST[kategori]";
-}else{
-$query = "SELECT * FROM kontak
-			INNER JOIN kategori
-			ON kontak.kategori_id = kategori.id";
-}
+	//Filter
+		$id = $_POST['kategori'];
+		$query = "SELECT * FROM kontak
+			  INNER JOIN kategori
+			  ON kontak.kategori_id = kategori.id
+			  WHERE kontak.kategori_id=$_POST[kategori]";
+			  echo $query;
 
-$query = "SELECT * FROM kontak
-			INNER JOIN kategori
-			ON kontak.kategori_id = kategori.id";
-$hasil = mysqli_query($db, $query);
+	} // 2.
+	else if (isset($_POST['cari'])){
+		$query = "SELECT * FROM kontak 
+			      INNER JOIN kategori
+			      ON kontak.kategori_id = kategori.id
+			      WHERE 
+			      	kontak.nama LIKE '%$_POST[search_text]%' OR
+			      	kontak.phone LIKE '%$_POST[search_text]%' OR
+			      	kontak.email LIKE '%$_POST[search_text]%' OR 
+			      	kategori.keterangan LIKE '%$_POST[search_text]%'
+			      	";
+
+			      } // 3.
+			      else $query = "SELECT
+				a.id,a.icon_path, a.nama, a.phone, a.email,
+				b.keterangan
+			  FROM
+				kontak a,
+				kategori b
+			  WHERE
+				a.kategori_id = b.id";
+	
+	$hasil = mysqli_query($db, $query);
+	//return $hasil;
+
 ?>
 
 <!DOCTYPE html>
@@ -31,22 +51,28 @@ $hasil = mysqli_query($db, $query);
 		<li><a href="kategori.php">Kategori</a></li>
 	</ul>
 </div>
+
+<!-- Filter -->
 <div id="filter">
 	<b>Filter berdasarkan kategori: </b>
-	<?php
-	$q2 = "SELECT * FROM kategori";
-	$h2 = mysqli_query($db, $q2);
-	while($row = mysqli_fetch_assoc($h2)){
-	?>
 	<form action="" method="post">
-		<select name="kategori">
-			<option value="<?php echo $row['id'] ?>"></option>
-			<?php } ?>
-		</select>
-		<input type="submit" name="filter" value="Filter" />
+	<select name="kategori">
+		<?php 
+		$q2 = "SELECT * FROM kategori";
+		$h2 = mysqli_query($db, $q2);
+		while($row = mysqli_fetch_assoc($h2)){
+			?>
+		<option value="<?php echo $row['id'] ?>"> 
+		<?php echo $row['keterangan']; ?> </option>
+		<?php } ?>
+	</select> 
+	<input type="submit" name="filter" value="Filter" /> 
+	<button href="index.php"> Reset Filter </button>
 	</form>
 </div>
+<!-- Filter -->
 
+<!-- search -->
 <div id="search">
 	<b>Search: </b>
 	<form action="" method="post">
@@ -54,6 +80,8 @@ $hasil = mysqli_query($db, $query);
 		<input type="submit" name="cari" value="Cari" />
 	</form>
 </div>
+<!-- search -->
+
 <div id="konten">
 	<h2>Kontak</h2>
 	<a href="form_tambah_kontak.php">Tambah Kontak</a>
@@ -61,6 +89,7 @@ $hasil = mysqli_query($db, $query);
 		<thead>
 			<tr>
 				<th>No.</th>
+				<th>Icon</th>
 				<th>Nama</th>
 				<th>Hp.</th>
 				<th>Email</th>
@@ -70,20 +99,22 @@ $hasil = mysqli_query($db, $query);
 		</thead>
 		<tbody>
 			<?php
-			$i=0;
-			while($row = mysqli_fetch_assoc($hasil)){
+			$i = 0;
+			while ($row = mysqli_fetch_assoc($hasil)){
 				$i++;
 			?>
 			<tr>
 				<td><?php echo $i; ?></td>
-				<td><?php echo $row['nama']; ?></td>
-				<td><?php echo $row['phone']; ?></td>
-				<td><?php echo $row['email']; ?></td>
-				<td><?php echo $row['keterangan']; ?></td>
+				<td><img src="<?php echo $row ['icon_path']; ?>" width="500"></td>
+				<td><?php echo $row ['nama']; ?></td>
+				<td><?php echo $row ['phone']; ?></td>
+				<td><?php echo $row ['email']; ?></td>
+				<td><?php echo $row ['keterangan']; ?></td>
 				<td>
-					<a href="">Edit</a> | 
-					<a href="">Delete</a>
+					<a href="form_edit_kontak.php?id=<?php echo $row['id']; ?>">Edit</a> | 
+					<a href="delete_kontak.php?id=<?php echo $row['id']; ?>">Delete</a>
 				</td>
+				
 			</tr>
 			<?php
 		}

@@ -1,7 +1,8 @@
-<?php // filename: form_tambah_kontak.php
+<?php
 
 include("koneksi.php");
-
+$query = "SELECT * FROM kategori ";
+$hasil = mysqli_query($db, $query);
 ?>
 
 <!DOCTYPE html>
@@ -19,11 +20,9 @@ include("koneksi.php");
 </div>
 <div id="konten">
 	<h2>Tambah Kontak</h2>
-	<?php
-	$q = "SELECT * FROM kategori";
-	$hasil = mysqli_query($db, $q);
-	?>
-	<form action="proses_Tambah_kontak.php" method="post">
+	<form action="prosses_tambah_kontak.php" method="post" enctype="multipart/form-data">
+		icon:
+		<input type="file" name="gambar"><br>
 		Nama:
 		<input type="text" name="nama" />
 		<br />
@@ -35,8 +34,9 @@ include("koneksi.php");
 		<br />
 		Kategori:
 		<select name="kategori">
-			<?php while($row = mysqli_fetch_array($hasil)); ?>
-			<option value="<?php echo $row[0]; ?>"> <?php echo $row[1]; ?></option>
+		<?php while($row1 = mysqli_fetch_array($hasil)):;?>
+		<option value="<?php echo $row1[0]; ?>"> <?php echo $row1[1]; ?> </option>
+		<?php endwhile; ?>
 		</select>
 		<br />
 		<input type="submit" value="Simpan" />
